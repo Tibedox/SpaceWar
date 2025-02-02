@@ -98,6 +98,7 @@ public class ScreenGame implements Screen {
 
     @Override
     public void dispose() {
-
+        imgBackGround.dispose();
+        imgShipsAtlas.dispose();
     }
 }

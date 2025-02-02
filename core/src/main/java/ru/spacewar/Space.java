@@ -13,6 +13,10 @@ public class Space extends SpaceObject{
     @Override
     public void move() {
         super.move();
+        outOfScreen();
+    }
+
+    private void outOfScreen(){
         if(y<-SCR_HEIGHT) y = SCR_HEIGHT;
     }
 }

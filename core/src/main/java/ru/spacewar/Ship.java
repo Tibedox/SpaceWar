@@ -15,8 +15,12 @@ public class Ship extends SpaceObject{
     @Override
     public void move() {
         super.move();
+        changePhase();
+    }
+
+    private void changePhase(){
         if(TimeUtils.millis()>timeLastPhase+timePhaseInterval) {
-            if (++phase == 12) phase = 0;
+            if (++phase == nPhases) phase = 0;
             timeLastPhase = TimeUtils.millis();
         }
     }
