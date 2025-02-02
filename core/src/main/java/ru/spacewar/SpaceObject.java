@@ -14,4 +14,12 @@ public class SpaceObject {
         x += vx;
         y += vy;
     }
+
+    public float scrX(){
+        return x-width/2;
+    }
+
+    public float scrY(){
+        return y-height/2;
+    }
 }

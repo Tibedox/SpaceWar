@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 
 public class ScreenGame implements Screen {
@@ -18,10 +19,13 @@ public class ScreenGame implements Screen {
     private Main main;
 
     Texture imgBackGround;
+    Texture imgShipsAtlas;
+    TextureRegion imgShip;
 
     SunButton btnBack;
 
     Space[] space = new Space[2];
+    Ship ship;
 
     public ScreenGame(Main main) {
         this.main = main;
@@ -30,12 +34,15 @@ public class ScreenGame implements Screen {
         touch = main.touch;
         font = main.font;
 
-        imgBackGround = new Texture("space2.png");
+        imgBackGround = new Texture("space0.png");
+        imgShipsAtlas = new Texture("ships_atlas.png");
+        imgShip = new TextureRegion(imgShipsAtlas, 0, 0, 400, 400);
 
         btnBack = new SunButton("x", font, 850, 1600);
 
         space[0] = new Space(0, 0);
         space[1] = new Space(0, SCR_HEIGHT);
+        ship = new Ship(SCR_WIDTH/2, 200);
     }
 
     @Override
@@ -61,6 +68,7 @@ public class ScreenGame implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for(Space s: space) batch.draw(imgBackGround, s.x, s.y, s.width, s.height);
+        batch.draw(imgShip, ship.scrX(), ship.scrY(), ship.width, ship.height);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         batch.end();
     }
