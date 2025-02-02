@@ -21,6 +21,8 @@ public class ScreenGame implements Screen {
 
     SunButton btnBack;
 
+    Space[] space = new Space[2];
+
     public ScreenGame(Main main) {
         this.main = main;
         batch = main.batch;
@@ -30,7 +32,10 @@ public class ScreenGame implements Screen {
 
         imgBackGround = new Texture("space2.png");
 
-        btnBack = new SunButton("Back", font, 200, 500);
+        btnBack = new SunButton("x", font, 850, 1600);
+
+        space[0] = new Space(0, 0);
+        space[1] = new Space(0, SCR_HEIGHT);
     }
 
     @Override
@@ -48,10 +53,14 @@ public class ScreenGame implements Screen {
                 main.setScreen(main.screenMenu);
             }
         }
+
+        // события
+        for(Space s: space) s.move();
+
         // отрисовка
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(imgBackGround, 0, 0, SCR_WIDTH, SCR_HEIGHT);
+        for(Space s: space) batch.draw(imgBackGround, s.x, s.y, s.width, s.height);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         batch.end();
     }
