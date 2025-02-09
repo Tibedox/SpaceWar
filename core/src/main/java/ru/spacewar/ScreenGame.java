@@ -64,6 +64,10 @@ public class ScreenGame implements Screen {
                 main.setScreen(main.screenMenu);
             }
         }
+        if(controls == ACCELEROMETER){
+            ship.vx = -Gdx.input.getAccelerometerX()*2;
+            ship.vy = -Gdx.input.getAccelerometerY()*2;
+        }
 
         // события
         for(Space s: space) s.move();

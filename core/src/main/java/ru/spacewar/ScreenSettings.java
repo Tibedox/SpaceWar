@@ -8,6 +8,7 @@ import static ru.spacewar.Main.SCR_WIDTH;
 import static ru.spacewar.Main.controls;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -72,10 +73,12 @@ public class ScreenSettings implements Screen {
                 controls = JOYSTICK;
             }
             if(btnAccelerometer.hit(touch)){
-                btnScreen.setFont(font70gray);
-                btnJoystick.setFont(font70gray);
-                btnAccelerometer.setFont(font70white);
-                controls = ACCELEROMETER;
+                if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
+                    btnScreen.setFont(font70gray);
+                    btnJoystick.setFont(font70gray);
+                    btnAccelerometer.setFont(font70white);
+                    controls = ACCELEROMETER;
+                }
             }
             if(btnBack.hit(touch)){
                 main.setScreen(main.screenMenu);
