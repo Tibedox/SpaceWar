@@ -1,5 +1,6 @@
 package ru.spacewar;
 
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Ship extends SpaceObject{
@@ -23,5 +24,10 @@ public class Ship extends SpaceObject{
             if (++phase == nPhases) phase = 0;
             timeLastPhase = TimeUtils.millis();
         }
+    }
+
+    public void touch(Vector3 t){
+        vx = (t.x - x)/20;
+        vy = (t.y - y)/20;
     }
 }
