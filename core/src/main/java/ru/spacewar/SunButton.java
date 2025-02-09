@@ -32,6 +32,13 @@ public class SunButton {
         x = SCR_WIDTH/2 - width/2;
     }
 
+    public void setFont(BitmapFont font){
+        this.font = font;
+        GlyphLayout glyphLayout = new GlyphLayout(font, text);
+        width = glyphLayout.width;
+        height = glyphLayout.height;
+    }
+
     boolean hit(float tx, float ty){
         return x<tx && tx<x+width && y>ty && ty>y-height;
     }

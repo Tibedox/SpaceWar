@@ -33,7 +33,7 @@ public class ScreenGame implements Screen {
         batch = main.batch;
         camera = main.camera;
         touch = main.touch;
-        font = main.font;
+        font = main.font70white;
 
         imgBackGround = new Texture("space0.png");
         imgShipsAtlas = new Texture("ships_atlas.png");
@@ -123,9 +123,11 @@ public class ScreenGame implements Screen {
 
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            touch.set(screenX, screenY, 0);
-            camera.unproject(touch);
-            ship.touch(touch);
+            if(controls == SCREEN) {
+                touch.set(screenX, screenY, 0);
+                camera.unproject(touch);
+                ship.touch(touch);
+            }
             return false;
         }
 
@@ -141,9 +143,11 @@ public class ScreenGame implements Screen {
 
         @Override
         public boolean touchDragged(int screenX, int screenY, int pointer) {
-            touch.set(screenX, screenY, 0);
-            camera.unproject(touch);
-            ship.touch(touch);
+            if(controls == SCREEN) {
+                touch.set(screenX, screenY, 0);
+                camera.unproject(touch);
+                ship.touch(touch);
+            }
             return false;
         }
 
