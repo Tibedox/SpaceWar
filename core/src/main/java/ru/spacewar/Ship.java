@@ -1,5 +1,8 @@
 package ru.spacewar;
 
+import static ru.spacewar.Main.SCR_HEIGHT;
+import static ru.spacewar.Main.SCR_WIDTH;
+
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -17,6 +20,26 @@ public class Ship extends SpaceObject{
     public void move() {
         super.move();
         changePhase();
+        outOfScreen();
+    }
+
+    private void outOfScreen(){
+        if(x<width/2){
+            vx = 0;
+            x = width/2;
+        }
+        if(x>SCR_WIDTH-width/2){
+            vx = 0;
+            x = SCR_WIDTH-width/2;
+        }
+        if(y<height/2){
+            vy = 0;
+            y = height/2;
+        }
+        if(y>SCR_HEIGHT-height/2){
+            vy = 0;
+            y = SCR_HEIGHT-height/2;
+        }
     }
 
     private void changePhase(){
