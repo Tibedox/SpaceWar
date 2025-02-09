@@ -20,6 +20,7 @@ public class ScreenSettings implements Screen {
 
     Texture imgBackGround;
 
+    SunButton btnSettings;
     SunButton btnBack;
 
     public ScreenSettings(Main main) {
@@ -30,8 +31,8 @@ public class ScreenSettings implements Screen {
         font = main.font;
 
         imgBackGround = new Texture("space3.png");
-
-        btnBack = new SunButton("Back", font, 200, 500);
+        btnSettings = new SunButton("Settings", font, 1500);
+        btnBack = new SunButton("Back", font, 150);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class ScreenSettings implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(imgBackGround, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-        font.draw(batch, "Settings", 400, 1500);
+        btnSettings.font.draw(batch, btnSettings.text, btnSettings.x, btnSettings.y);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         batch.end();
     }

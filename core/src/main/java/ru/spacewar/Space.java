@@ -6,7 +6,7 @@ public class Space extends SpaceObject{
     public Space(float x, float y){
         super(x, y);
         width = SCR_WIDTH;
-        height = SCR_HEIGHT;
+        height = SCR_HEIGHT+6;
         vy = -5;
     }
 

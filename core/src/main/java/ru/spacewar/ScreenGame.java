@@ -60,7 +60,7 @@ public class ScreenGame implements Screen {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
 
-            if(btnBack.hit(touch.x, touch.y)){
+            if(btnBack.hit(touch)){
                 main.setScreen(main.screenMenu);
             }
         }
