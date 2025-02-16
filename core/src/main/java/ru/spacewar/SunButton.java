@@ -39,6 +39,12 @@ public class SunButton {
         height = glyphLayout.height;
     }
 
+    public void setText(String text){
+        this.text = text;
+        GlyphLayout glyphLayout = new GlyphLayout(font, text);
+        width = glyphLayout.width;
+    }
+
     boolean hit(float tx, float ty){
         return x<tx && tx<x+width && y>ty && ty>y-height;
     }

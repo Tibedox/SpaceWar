@@ -44,7 +44,7 @@ public class ScreenSettings implements Screen {
         btnSettings = new SunButton("Settings", font70white, 1500);
         btnControl = new SunButton("Control", font70white, 100, 1200);
         btnScreen = new SunButton("Screen", font70white, 200, 1100);
-        btnJoystick = new SunButton("Joystick Right", font70gray, 200, 1000);
+        btnJoystick = new SunButton(main.joystick.getText(), font70gray, 200, 1000);
         btnAccelerometer = new SunButton("Accelerometer", font70gray, 200, 900);
         btnBack = new SunButton("Back", font70white, 150);
     }
@@ -70,7 +70,13 @@ public class ScreenSettings implements Screen {
                 btnScreen.setFont(font70gray);
                 btnJoystick.setFont(font70white);
                 btnAccelerometer.setFont(font70gray);
-                controls = JOYSTICK;
+                if(controls == JOYSTICK){
+                    main.joystick.side = !main.joystick.side;
+                    btnJoystick.setText(main.joystick.getText());
+                }
+                else {
+                    controls = JOYSTICK;
+                }
             }
             if(btnAccelerometer.hit(touch)){
                 if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {

@@ -19,6 +19,7 @@ public class ScreenGame implements Screen {
     private BitmapFont font;
     private Main main;
 
+    Texture imgJoystick;
     Texture imgBackGround;
     Texture imgShipsAtlas;
     TextureRegion[] imgShip = new TextureRegion[12];
@@ -35,6 +36,7 @@ public class ScreenGame implements Screen {
         touch = main.touch;
         font = main.font70white;
 
+        imgJoystick = new Texture("joystick.png");
         imgBackGround = new Texture("space0.png");
         imgShipsAtlas = new Texture("ships_atlas.png");
         for (int i = 0; i < imgShip.length; i++) {

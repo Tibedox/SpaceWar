@@ -11,6 +11,7 @@ public class Main extends Game {
     public static final float SCR_WIDTH = 900;
     public static final float SCR_HEIGHT = 1600;
     public static final int SCREEN = 0, JOYSTICK = 1, ACCELEROMETER = 2;
+    public static final boolean LEFT = false, RIGHT = true;
     public static int controls = SCREEN;
 
     public SpriteBatch batch;
@@ -19,6 +20,7 @@ public class Main extends Game {
     public BitmapFont font70white;
     public BitmapFont font70gray;
 
+    Joystick joystick;
     ScreenMenu screenMenu;
     ScreenGame screenGame;
     ScreenSettings screenSettings;
@@ -34,6 +36,7 @@ public class Main extends Game {
         font70white = new BitmapFont(Gdx.files.internal("comicrelief70white.fnt"));
         font70gray = new BitmapFont(Gdx.files.internal("comicrelief70gray.fnt"));
 
+        joystick = new Joystick(360, RIGHT);
         screenMenu = new ScreenMenu(this);
         screenGame = new ScreenGame(this);
         screenSettings = new ScreenSettings(this);
