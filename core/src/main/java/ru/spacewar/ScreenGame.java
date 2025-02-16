@@ -79,6 +79,9 @@ public class ScreenGame implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for(Space s: space) batch.draw(imgBackGround, s.x, s.y, s.width, s.height);
+        if(controls == JOYSTICK){
+            batch.draw(imgJoystick, main.joystick.scrX(), main.joystick.scrY(), main.joystick.width, main.joystick.height);
+        }
         batch.draw(imgShip[ship.phase], ship.scrX(), ship.scrY(), ship.width, ship.height);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         batch.end();
@@ -108,6 +111,7 @@ public class ScreenGame implements Screen {
     public void dispose() {
         imgBackGround.dispose();
         imgShipsAtlas.dispose();
+        imgJoystick.dispose();
     }
 
     class SunInputProcessor implements InputProcessor{
@@ -129,10 +133,15 @@ public class ScreenGame implements Screen {
 
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            touch.set(screenX, screenY, 0);
+            camera.unproject(touch);
             if(controls == SCREEN) {
-                touch.set(screenX, screenY, 0);
-                camera.unproject(touch);
-                ship.touch(touch);
+                ship.touchScreen(touch);
+            }
+            if(controls == JOYSTICK) {
+                if(main.joystick.isTouchInside(touch)){
+                    ship.touchJoystick(touch, main.joystick);
+                }
             }
             return false;
         }
@@ -149,10 +158,15 @@ public class ScreenGame implements Screen {
 
         @Override
         public boolean touchDragged(int screenX, int screenY, int pointer) {
+            touch.set(screenX, screenY, 0);
+            camera.unproject(touch);
             if(controls == SCREEN) {
-                touch.set(screenX, screenY, 0);
-                camera.unproject(touch);
-                ship.touch(touch);
+                ship.touchScreen(touch);
+            }
+            if(controls == JOYSTICK) {
+                if(main.joystick.isTouchInside(touch)){
+                    ship.touchJoystick(touch, main.joystick);
+                }
             }
             return false;
         }

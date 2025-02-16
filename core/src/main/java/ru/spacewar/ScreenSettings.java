@@ -71,7 +71,7 @@ public class ScreenSettings implements Screen {
                 btnJoystick.setFont(font70white);
                 btnAccelerometer.setFont(font70gray);
                 if(controls == JOYSTICK){
-                    main.joystick.side = !main.joystick.side;
+                    main.joystick.setSide(!main.joystick.side);
                     btnJoystick.setText(main.joystick.getText());
                 }
                 else {
