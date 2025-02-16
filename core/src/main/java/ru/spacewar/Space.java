@@ -7,7 +7,7 @@ public class Space extends SpaceObject{
         super(x, y);
         width = SCR_WIDTH;
         height = SCR_HEIGHT+6;
-        vy = -5;
+        vy = -3;
     }
 
     @Override

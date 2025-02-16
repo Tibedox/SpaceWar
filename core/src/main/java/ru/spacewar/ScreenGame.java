@@ -11,6 +11,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.TimeUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScreenGame implements Screen {
     private SpriteBatch batch;
@@ -23,11 +27,15 @@ public class ScreenGame implements Screen {
     Texture imgBackGround;
     Texture imgShipsAtlas;
     TextureRegion[] imgShip = new TextureRegion[12];
+    TextureRegion[][] imgEnemy = new TextureRegion[4][12];
 
     SunButton btnBack;
 
     Space[] space = new Space[2];
     Ship ship;
+    List<Enemy> enemies = new ArrayList<>();
+
+    private long timeLastSpawnEnemy, timeSpawnEnemyInterval = 2000;
 
     public ScreenGame(Main main) {
         this.main = main;
@@ -40,7 +48,12 @@ public class ScreenGame implements Screen {
         imgBackGround = new Texture("space0.png");
         imgShipsAtlas = new Texture("ships_atlas.png");
         for (int i = 0; i < imgShip.length; i++) {
-            imgShip[i] = new TextureRegion(imgShipsAtlas, (i<6?i:12-i)*400, 0, 400, 400);
+            imgShip[i] = new TextureRegion(imgShipsAtlas, (i<7?i:12-i)*400, 0, 400, 400);
+        }
+        for(int j = 0; j<imgEnemy.length; j++) {
+            for (int i = 0; i < imgEnemy[j].length; i++) {
+                imgEnemy[j][i] = new TextureRegion(imgShipsAtlas, (i < 7 ? i : 12 - i) * 400, (j+1)*400, 400, 400);
+            }
         }
 
         btnBack = new SunButton("x", font, 850, 1600);
@@ -74,6 +87,8 @@ public class ScreenGame implements Screen {
         // события
         for(Space s: space) s.move();
         ship.move();
+        spawnEnemy();
+        for(Enemy e: enemies) e.move();
 
         // отрисовка
         batch.setProjectionMatrix(camera.combined);
@@ -81,6 +96,9 @@ public class ScreenGame implements Screen {
         for(Space s: space) batch.draw(imgBackGround, s.x, s.y, s.width, s.height);
         if(controls == JOYSTICK){
             batch.draw(imgJoystick, main.joystick.scrX(), main.joystick.scrY(), main.joystick.width, main.joystick.height);
+        }
+        for(Enemy e: enemies){
+            batch.draw(imgEnemy[e.type][e.phase], e.scrX(), e.scrY(), e.width, e.height);
         }
         batch.draw(imgShip[ship.phase], ship.scrX(), ship.scrY(), ship.width, ship.height);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
@@ -112,6 +130,13 @@ public class ScreenGame implements Screen {
         imgBackGround.dispose();
         imgShipsAtlas.dispose();
         imgJoystick.dispose();
+    }
+
+    private void spawnEnemy(){
+        if(TimeUtils.millis()>timeLastSpawnEnemy+timeSpawnEnemyInterval){
+            enemies.add(new Enemy());
+            timeLastSpawnEnemy = TimeUtils.millis();
+        }
     }
 
     class SunInputProcessor implements InputProcessor{
