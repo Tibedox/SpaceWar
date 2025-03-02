@@ -31,6 +31,7 @@ public class ScreenGame implements Screen {
     TextureRegion[] imgShip = new TextureRegion[12];
     TextureRegion[][] imgEnemy = new TextureRegion[4][12];
     TextureRegion[] imgShot = new TextureRegion[4];
+    TextureRegion[][] imgFragment = new TextureRegion[5][36];
 
     Sound sndBlaster;
     Sound sndExplosion;
@@ -69,6 +70,14 @@ public class ScreenGame implements Screen {
         }
         for (int i = 0; i < imgShot.length; i++) {
             imgShot[i] = new TextureRegion(imgShotsAtlas, i*100, 0, 100, 350);
+        }
+        int k = (int) Math.sqrt(imgFragment[0].length);
+        int size = 400/k;
+        for(int j = 0; j<imgFragment.length; j++) {
+            for (int i = 0; i < imgFragment[j].length; i++) {
+                if(j==imgFragment.length-1) imgFragment[j][i] = new TextureRegion(imgShip[0], i%k*size, i/k*size, size, size);
+                else imgFragment[j][i] = new TextureRegion(imgEnemy[j][0], i%k*size, i/k*size, size, size);
+            }
         }
 
         btnBack = new SunButton("x", font, 850, 1600);
@@ -109,6 +118,7 @@ public class ScreenGame implements Screen {
                 enemies.remove(i);
             }
         }
+        System.out.println(enemies.size());
         spawnShots();
         for(int i=shots.size()-1; i>=0; i--){
             shots.get(i).move();
@@ -138,6 +148,10 @@ public class ScreenGame implements Screen {
         }
         for(Shot s: shots){
             batch.draw(imgShot[0], s.scrX(), s.scrY(), s.width, s.height);
+        }
+        float size = SCR_HEIGHT/imgFragment[0].length;
+        for (int i = 0; i < imgFragment[0].length; i++) {
+            batch.draw(imgFragment[0][i], 100, i*size, size, size);
         }
         batch.draw(imgShip[ship.phase], ship.scrX(), ship.scrY(), ship.width, ship.height);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
