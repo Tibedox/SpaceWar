@@ -5,6 +5,7 @@ import static ru.spacewar.Main.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -31,6 +32,9 @@ public class ScreenGame implements Screen {
     TextureRegion[][] imgEnemy = new TextureRegion[4][12];
     TextureRegion[] imgShot = new TextureRegion[4];
 
+    Sound sndBlaster;
+    Sound sndExplosion;
+
     SunButton btnBack;
 
     Space[] space = new Space[2];
@@ -47,6 +51,9 @@ public class ScreenGame implements Screen {
         camera = main.camera;
         touch = main.touch;
         font = main.font70white;
+
+        sndBlaster = Gdx.audio.newSound(Gdx.files.internal("blaster.mp3"));
+        sndExplosion = Gdx.audio.newSound(Gdx.files.internal("explosion.mp3"));
 
         imgJoystick = new Texture("joystick.png");
         imgBackGround = new Texture("space0.png");
@@ -157,6 +164,7 @@ public class ScreenGame implements Screen {
             shots.add(new Shot(ship.x-60, ship.y));
             shots.add(new Shot(ship.x+60, ship.y));
             timeLastShoot = TimeUtils.millis();
+            sndBlaster.play();
         }
     }
 
