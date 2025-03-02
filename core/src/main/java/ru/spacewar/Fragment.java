@@ -5,7 +5,10 @@ import static ru.spacewar.Main.*;
 import com.badlogic.gdx.math.MathUtils;
 
 public class Fragment extends SpaceObject{
-    int num;
+    public int num;
+    public float rotation;
+    private float vRotation;
+
     public Fragment(float x, float y, int type, int lengthImgFragments) {
         super(x, y);
         this.type = type;
@@ -16,6 +19,13 @@ public class Fragment extends SpaceObject{
         float v = MathUtils.random(2f, 12f);
         vx = v*MathUtils.sin(a);
         vy = v*MathUtils.cos(a);
+        vRotation = MathUtils.random(-5f, 5f);
+    }
+
+    @Override
+    public void move() {
+        super.move();
+        rotation += vRotation;
     }
 
     public boolean outOfScreen(){
