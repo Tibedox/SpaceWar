@@ -11,6 +11,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ScreenAbout implements Screen {
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -33,6 +36,7 @@ public class ScreenAbout implements Screen {
 
         btnBack = new SunButton("Back", font, 200, 500);
     }
+
 
     @Override
     public void show() {

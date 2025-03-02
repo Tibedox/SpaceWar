@@ -103,20 +103,20 @@ public class ScreenGame implements Screen {
         for(Space s: space) s.move();
         ship.move();
         spawnEnemy();
-        for(int i=0; i<enemies.size(); i++) {
+        for(int i=enemies.size()-1; i>=0; i--) {
             enemies.get(i).move();
             if(enemies.get(i).outOfScreen()){
                 enemies.remove(i);
             }
         }
         spawnShots();
-        for(int i=0; i<shots.size(); i++){
+        for(int i=shots.size()-1; i>=0; i--){
             shots.get(i).move();
             if(shots.get(i).outOfScreen()) {
                 shots.remove(i);
                 break;
             }
-            for (int j = 0; j < enemies.size(); j++) {
+            for (int j = enemies.size()-1; j >= 0; j--) {
                 if(shots.get(i).overlap(enemies.get(j))){
                     sndExplosion.play();
                     shots.remove(i);
