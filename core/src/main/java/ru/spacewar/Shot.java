@@ -10,4 +10,8 @@ public class Shot extends SpaceObject{
         height = 150;
         vy = 20f;
     }
+
+    public boolean outOfScreen(){
+        return y<-height/2 || y>SCR_HEIGHT+height/2 || x<-width/2 || x>SCR_WIDTH+width/2;
+    }
 }

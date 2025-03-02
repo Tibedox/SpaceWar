@@ -31,4 +31,8 @@ public class Enemy extends SpaceObject{
             timeLastPhase = TimeUtils.millis();
         }
     }
+
+    public boolean outOfScreen(){
+        return y<-height/2;
+    }
 }
