@@ -43,7 +43,7 @@ public class ScreenGame implements Screen {
     List<Shot> shots = new ArrayList<>();
 
     private long timeLastSpawnEnemy, timeSpawnEnemyInterval = 2000;
-    private long timeLastShoot, timeShootInterval = 500;
+    private long timeLastShoot, timeShootInterval = 1000;
 
     public ScreenGame(Main main) {
         this.main = main;
@@ -105,7 +105,16 @@ public class ScreenGame implements Screen {
         spawnEnemy();
         for(Enemy e: enemies) e.move();
         spawnShots();
-        for(Shot s: shots) s.move();
+        for(int i=0; i<shots.size(); i++){
+            shots.get(i).move();
+            for (int j = 0; j < enemies.size(); j++) {
+                if(shots.get(i).overlap(enemies.get(j))){
+                    sndExplosion.play();
+                    shots.remove(i);
+                    enemies.remove(j);
+                }
+            }
+        }
 
         // отрисовка
         batch.setProjectionMatrix(camera.combined);
