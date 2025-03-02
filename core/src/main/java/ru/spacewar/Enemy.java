@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Enemy extends SpaceObject{
-    public int type;
     public int phase, nPhases = 12;
     private long timeLastPhase, timePhaseInterval = 50;
 

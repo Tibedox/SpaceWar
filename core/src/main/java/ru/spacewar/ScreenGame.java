@@ -42,9 +42,11 @@ public class ScreenGame implements Screen {
     Ship ship;
     List<Enemy> enemies = new ArrayList<>();
     List<Shot> shots = new ArrayList<>();
+    List<Fragment> fragments = new ArrayList<>();
 
     private long timeLastSpawnEnemy, timeSpawnEnemyInterval = 2000;
     private long timeLastShoot, timeShootInterval = 1000;
+    private int nFragments = 10000;
 
     public ScreenGame(Main main) {
         this.main = main;
@@ -118,7 +120,6 @@ public class ScreenGame implements Screen {
                 enemies.remove(i);
             }
         }
-        System.out.println(enemies.size());
         spawnShots();
         for(int i=shots.size()-1; i>=0; i--){
             shots.get(i).move();
@@ -130,9 +131,16 @@ public class ScreenGame implements Screen {
                 if(shots.get(i).overlap(enemies.get(j))){
                     sndExplosion.play();
                     shots.remove(i);
+                    spawnFragments(enemies.get(j));
                     enemies.remove(j);
                     break;
                 }
+            }
+        }
+        for (int i = fragments.size()-1; i >= 0; i--) {
+            fragments.get(i).move();
+            if(fragments.get(i).outOfScreen()) {
+                fragments.remove(i);
             }
         }
 
@@ -143,15 +151,14 @@ public class ScreenGame implements Screen {
         if(controls == JOYSTICK){
             batch.draw(imgJoystick, main.joystick.scrX(), main.joystick.scrY(), main.joystick.width, main.joystick.height);
         }
+        for(Fragment f: fragments){
+            batch.draw(imgFragment[f.type][f.num], f.scrX(), f.scrY(), f.width, f.height);
+        }
         for(Enemy e: enemies){
             batch.draw(imgEnemy[e.type][e.phase], e.scrX(), e.scrY(), e.width, e.height);
         }
         for(Shot s: shots){
             batch.draw(imgShot[0], s.scrX(), s.scrY(), s.width, s.height);
-        }
-        float size = SCR_HEIGHT/imgFragment[0].length;
-        for (int i = 0; i < imgFragment[0].length; i++) {
-            batch.draw(imgFragment[0][i], 100, i*size, size, size);
         }
         batch.draw(imgShip[ship.phase], ship.scrX(), ship.scrY(), ship.width, ship.height);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
@@ -198,6 +205,12 @@ public class ScreenGame implements Screen {
             shots.add(new Shot(ship.x+60, ship.y));
             timeLastShoot = TimeUtils.millis();
             sndBlaster.play();
+        }
+    }
+
+    private void spawnFragments(SpaceObject o){
+        for (int i = 0; i < nFragments; i++) {
+            fragments.add(new Fragment(o.x, o.y, o.type, imgFragment[0].length));
         }
     }
 
