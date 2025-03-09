@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class ScreenGame implements Screen {
     private long timeLastSpawnEnemy, timeSpawnEnemyInterval = 1500;
     private long timeLastShoot, timeShootInterval = 800;
     private int nFragments = 150;
+    private boolean gameOver;
 
     public ScreenGame(Main main) {
         this.main = main;
@@ -112,15 +114,24 @@ public class ScreenGame implements Screen {
 
         // события
         for(Space s: space) s.move();
-        ship.move();
         spawnEnemy();
         for(int i=enemies.size()-1; i>=0; i--) {
             enemies.get(i).move();
             if(enemies.get(i).outOfScreen()){
                 enemies.remove(i);
+                if(!gameOver) gameOver();
+                break;
+            }
+            if(enemies.get(i).overlap(ship)){
+                spawnFragments(enemies.get(i));
+                enemies.remove(i);
+                gameOver();
             }
         }
-        spawnShots();
+        if(!gameOver) {
+            ship.move();
+            spawnShots();
+        }
         for(int i=shots.size()-1; i>=0; i--){
             shots.get(i).move();
             if(shots.get(i).outOfScreen()) {
@@ -167,6 +178,9 @@ public class ScreenGame implements Screen {
         batch.draw(imgShip[ship.phase], ship.scrX(), ship.scrY(), ship.width, ship.height);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         font.draw(batch, "score:"+main.player.score, 10, 1600);
+        if(gameOver){
+            font.draw(batch, "GAME OVER", 0, 1200, SCR_WIDTH, Align.center, true);
+        }
         batch.end();
     }
 
@@ -217,6 +231,13 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < nFragments; i++) {
             fragments.add(new Fragment(o.x, o.y, o.type, imgFragment[0].length));
         }
+    }
+
+    private void gameOver(){
+        if(isSoundOn) sndExplosion.play();
+        spawnFragments(ship);
+        ship.x = -10000;
+        gameOver = true;
     }
 
     class SunInputProcessor implements InputProcessor{

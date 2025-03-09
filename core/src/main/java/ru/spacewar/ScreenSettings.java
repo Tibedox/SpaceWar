@@ -49,9 +49,11 @@ public class ScreenSettings implements Screen {
         loadSettings();
         btnSettings = new SunButton("Settings", font70white, 1500);
         btnControl = new SunButton("Control", font70white, 100, 1200);
-        btnScreen = new SunButton("Screen", fontByControls(SCREEN), 200, 1100);
-        btnJoystick = new SunButton(main.joystick.getText(), fontByControls(JOYSTICK), 200, 1000);
-        btnAccelerometer = new SunButton("Accelerometer", fontByControls(ACCELEROMETER), 200, 900);
+
+        btnScreen = new SunButton("Screen", font70white, 200, 1100);
+        btnJoystick = new SunButton(main.joystick.getText(), font70white, 200, 1000);
+        btnAccelerometer = new SunButton("Accelerometer", font70white, 200, 900);
+        setFontColorByControls();
         btnSound = new SunButton(isSoundOn ? "Sound ON" : "Sound OFF", font70white, 100, 750);
         btnBack = new SunButton("Back", font70white, 150);
     }
@@ -68,15 +70,10 @@ public class ScreenSettings implements Screen {
             camera.unproject(touch);
 
             if(btnScreen.hit(touch)){
-                btnScreen.setFont(font70white);
-                btnJoystick.setFont(font70gray);
-                btnAccelerometer.setFont(font70gray);
                 controls = SCREEN;
+                setFontColorByControls();
             }
             if(btnJoystick.hit(touch)){
-                btnScreen.setFont(font70gray);
-                btnJoystick.setFont(font70white);
-                btnAccelerometer.setFont(font70gray);
                 if(controls == JOYSTICK){
                     main.joystick.setSide(!main.joystick.side);
                     btnJoystick.setText(main.joystick.getText());
@@ -84,13 +81,12 @@ public class ScreenSettings implements Screen {
                 else {
                     controls = JOYSTICK;
                 }
+                setFontColorByControls();
             }
             if(btnAccelerometer.hit(touch)){
                 if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
-                    btnScreen.setFont(font70gray);
-                    btnJoystick.setFont(font70gray);
-                    btnAccelerometer.setFont(font70white);
                     controls = ACCELEROMETER;
+                    setFontColorByControls();
                 }
             }
             if(btnSound.hit(touch)){
@@ -140,8 +136,10 @@ public class ScreenSettings implements Screen {
 
     }
 
-    private BitmapFont fontByControls(int SCR){
-        return controls == SCR ? font70white : font70gray;
+    private void setFontColorByControls(){
+        btnScreen.setFont(controls == SCREEN ? font70white : font70gray);
+        btnJoystick.setFont(controls == JOYSTICK ? font70white : font70gray);
+        btnAccelerometer.setFont(controls == ACCELEROMETER ? font70white : font70gray);
     }
 
     private void saveSettings(){
