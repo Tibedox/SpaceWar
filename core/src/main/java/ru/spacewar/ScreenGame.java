@@ -88,12 +88,12 @@ public class ScreenGame implements Screen {
 
         space[0] = new Space(0, 0);
         space[1] = new Space(0, SCR_HEIGHT);
-        ship = new Ship(SCR_WIDTH/2, 200);
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(new SunInputProcessor());
+        gameStart();
     }
 
     @Override
@@ -231,6 +231,16 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < nFragments; i++) {
             fragments.add(new Fragment(o.x, o.y, o.type, imgFragment[0].length));
         }
+    }
+
+    private void gameStart(){
+        gameOver = false;
+        ship = new Ship(SCR_WIDTH/2, 200);
+        enemies.clear();
+        fragments.clear();
+        shots.clear();
+        main.player.score = 0;
+        main.player.kills = 0;
     }
 
     private void gameOver(){
