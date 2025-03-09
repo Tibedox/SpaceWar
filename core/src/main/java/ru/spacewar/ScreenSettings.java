@@ -6,6 +6,7 @@ import static ru.spacewar.Main.SCREEN;
 import static ru.spacewar.Main.SCR_HEIGHT;
 import static ru.spacewar.Main.SCR_WIDTH;
 import static ru.spacewar.Main.controls;
+import static ru.spacewar.Main.isSoundOn;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -30,6 +31,7 @@ public class ScreenSettings implements Screen {
     SunButton btnScreen;
     SunButton btnJoystick;
     SunButton btnAccelerometer;
+    SunButton btnSound;
     SunButton btnBack;
 
     public ScreenSettings(Main main) {
@@ -46,6 +48,7 @@ public class ScreenSettings implements Screen {
         btnScreen = new SunButton("Screen", font70white, 200, 1100);
         btnJoystick = new SunButton(main.joystick.getText(), font70gray, 200, 1000);
         btnAccelerometer = new SunButton("Accelerometer", font70gray, 200, 900);
+        btnSound = new SunButton(isSoundOn ? "Sound ON" : "Sound OFF", font70white, 100, 750);
         btnBack = new SunButton("Back", font70white, 150);
     }
 
@@ -86,6 +89,10 @@ public class ScreenSettings implements Screen {
                     controls = ACCELEROMETER;
                 }
             }
+            if(btnSound.hit(touch)){
+                isSoundOn = !isSoundOn;
+                btnSound.setText(isSoundOn ? "Sound ON" : "Sound OFF");
+            }
             if(btnBack.hit(touch)){
                 main.setScreen(main.screenMenu);
             }
@@ -99,6 +106,7 @@ public class ScreenSettings implements Screen {
         btnScreen.font.draw(batch, btnScreen.text, btnScreen.x, btnScreen.y);
         btnJoystick.font.draw(batch, btnJoystick.text, btnJoystick.x, btnJoystick.y);
         btnAccelerometer.font.draw(batch, btnAccelerometer.text, btnAccelerometer.x, btnAccelerometer.y);
+        btnSound.font.draw(batch, btnSound.text, btnSound.x, btnSound.y);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         batch.end();
     }

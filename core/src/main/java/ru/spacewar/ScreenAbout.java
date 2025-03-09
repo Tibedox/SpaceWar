@@ -1,7 +1,6 @@
 package ru.spacewar;
 
-import static ru.spacewar.Main.SCR_HEIGHT;
-import static ru.spacewar.Main.SCR_WIDTH;
+import static ru.spacewar.Main.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

@@ -129,7 +129,7 @@ public class ScreenGame implements Screen {
             }
             for (int j = enemies.size()-1; j >= 0; j--) {
                 if(shots.get(i).overlap(enemies.get(j))){
-                    sndExplosion.play();
+                    if(isSoundOn) sndExplosion.play();
                     shots.remove(i);
                     if(--enemies.get(j).hp == 0) {
                         spawnFragments(enemies.get(j));
@@ -209,7 +209,7 @@ public class ScreenGame implements Screen {
             shots.add(new Shot(ship.x-60, ship.y));
             shots.add(new Shot(ship.x+60, ship.y));
             timeLastShoot = TimeUtils.millis();
-            sndBlaster.play();
+            if(isSoundOn) sndBlaster.play();
         }
     }
 
