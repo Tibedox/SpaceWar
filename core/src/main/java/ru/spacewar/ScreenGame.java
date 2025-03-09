@@ -44,6 +44,7 @@ public class ScreenGame implements Screen {
     List<Enemy> enemies = new ArrayList<>();
     List<Shot> shots = new ArrayList<>();
     List<Fragment> fragments = new ArrayList<>();
+    Player[] players = new Player[10];
 
     private long timeLastSpawnEnemy, timeSpawnEnemyInterval = 1500;
     private long timeLastShoot, timeShootInterval = 800;
@@ -88,6 +89,9 @@ public class ScreenGame implements Screen {
 
         space[0] = new Space(0, 0);
         space[1] = new Space(0, SCR_HEIGHT);
+        for (int i = 0; i < players.length; i++) {
+            players[i] = new Player();
+        }
     }
 
     @Override
