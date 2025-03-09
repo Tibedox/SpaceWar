@@ -2,6 +2,7 @@ package ru.spacewar;
 
 import static ru.spacewar.Main.ACCELEROMETER;
 import static ru.spacewar.Main.JOYSTICK;
+import static ru.spacewar.Main.RIGHT;
 import static ru.spacewar.Main.SCREEN;
 import static ru.spacewar.Main.SCR_HEIGHT;
 import static ru.spacewar.Main.SCR_WIDTH;
@@ -10,6 +11,7 @@ import static ru.spacewar.Main.isSoundOn;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -43,11 +45,13 @@ public class ScreenSettings implements Screen {
         font70gray = main.font70gray;
 
         imgBackGround = new Texture("space3.png");
+
+        loadSettings();
         btnSettings = new SunButton("Settings", font70white, 1500);
         btnControl = new SunButton("Control", font70white, 100, 1200);
-        btnScreen = new SunButton("Screen", font70white, 200, 1100);
-        btnJoystick = new SunButton(main.joystick.getText(), font70gray, 200, 1000);
-        btnAccelerometer = new SunButton("Accelerometer", font70gray, 200, 900);
+        btnScreen = new SunButton("Screen", fontByControls(SCREEN), 200, 1100);
+        btnJoystick = new SunButton(main.joystick.getText(), fontByControls(JOYSTICK), 200, 1000);
+        btnAccelerometer = new SunButton("Accelerometer", fontByControls(ACCELEROMETER), 200, 900);
         btnSound = new SunButton(isSoundOn ? "Sound ON" : "Sound OFF", font70white, 100, 750);
         btnBack = new SunButton("Back", font70white, 150);
     }
@@ -128,11 +132,32 @@ public class ScreenSettings implements Screen {
 
     @Override
     public void hide() {
-
+        saveSettings();
     }
 
     @Override
     public void dispose() {
 
+    }
+
+    private BitmapFont fontByControls(int SCR){
+        return controls == SCR ? font70white : font70gray;
+    }
+
+    private void saveSettings(){
+        Preferences prefs = Gdx.app.getPreferences("SpaceWarSettings");
+        prefs.putString("name", main.player.name);
+        prefs.putInteger("controls", controls);
+        prefs.putBoolean("joystick", main.joystick.side);
+        prefs.putBoolean("sound", isSoundOn);
+        prefs.flush();
+    }
+
+    private void loadSettings(){
+        Preferences prefs = Gdx.app.getPreferences("SpaceWarSettings");
+        main.player.name = prefs.getString("name", "Noname");
+        controls = prefs.getInteger("controls", SCREEN);
+        main.joystick.setSide(prefs.getBoolean("joystick", RIGHT));
+        isSoundOn = prefs.getBoolean("sound", true);
     }
 }
