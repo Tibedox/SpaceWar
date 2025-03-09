@@ -21,6 +21,7 @@ public class Main extends Game {
     public BitmapFont font70gray;
 
     Joystick joystick;
+    Player player;
     ScreenMenu screenMenu;
     ScreenGame screenGame;
     ScreenSettings screenSettings;
@@ -37,6 +38,7 @@ public class Main extends Game {
         font70gray = new BitmapFont(Gdx.files.internal("comicrelief70gray.fnt"));
 
         joystick = new Joystick(360, RIGHT);
+        player = new Player();
         screenMenu = new ScreenMenu(this);
         screenGame = new ScreenGame(this);
         screenSettings = new ScreenSettings(this);

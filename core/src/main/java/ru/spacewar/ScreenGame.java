@@ -44,8 +44,8 @@ public class ScreenGame implements Screen {
     List<Shot> shots = new ArrayList<>();
     List<Fragment> fragments = new ArrayList<>();
 
-    private long timeLastSpawnEnemy, timeSpawnEnemyInterval = 2000;
-    private long timeLastShoot, timeShootInterval = 1000;
+    private long timeLastSpawnEnemy, timeSpawnEnemyInterval = 1500;
+    private long timeLastShoot, timeShootInterval = 800;
     private int nFragments = 150;
 
     public ScreenGame(Main main) {
@@ -131,8 +131,12 @@ public class ScreenGame implements Screen {
                 if(shots.get(i).overlap(enemies.get(j))){
                     sndExplosion.play();
                     shots.remove(i);
-                    spawnFragments(enemies.get(j));
-                    enemies.remove(j);
+                    if(--enemies.get(j).hp == 0) {
+                        spawnFragments(enemies.get(j));
+                        main.player.kills++;
+                        main.player.score+=enemies.get(j).price;
+                        enemies.remove(j);
+                    }
                     break;
                 }
             }
@@ -162,6 +166,7 @@ public class ScreenGame implements Screen {
         }
         batch.draw(imgShip[ship.phase], ship.scrX(), ship.scrY(), ship.width, ship.height);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
+        font.draw(batch, "score:"+main.player.score, 10, 1600);
         batch.end();
     }
 
