@@ -10,4 +10,10 @@ public class Player {
         score = player.score;
         kills = player.kills;
     }
+
+    public void clear(){
+        name = "Noname";
+        score = 0;
+        kills = 0;
+    }
 }

@@ -4,6 +4,7 @@ import static ru.spacewar.Main.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -93,6 +94,7 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < players.length; i++) {
             players[i] = new Player();
         }
+        loadTableOfRecords();
     }
 
     @Override
@@ -263,6 +265,43 @@ public class ScreenGame implements Screen {
         ship.x = -10000;
         gameOver = true;
         players[players.length-1].clone(main.player);
+        sortTableOfRecords();
+        saveTableOfRecords();
+    }
+
+    private void sortTableOfRecords(){
+        for (int j = 0; j < players.length; j++) {
+            for (int i = 0; i < players.length-1; i++) {
+                if(players[i].score < players[i+1].score){
+                    Player tmp = players[i];
+                    players[i] = players[i+1];
+                    players[i+1] = tmp;
+                }
+            }
+        }
+    }
+
+    void saveTableOfRecords(){
+        Preferences prefs = Gdx.app.getPreferences("SpaceWarRecords");
+        for (int i = 0; i < players.length; i++) {
+            prefs.putString("name"+i, players[i].name);
+            prefs.putInteger("score"+i, players[i].score);
+            prefs.putInteger("kills"+i, players[i].kills);
+        }
+        prefs.flush();
+    }
+
+    void loadTableOfRecords(){
+        Preferences prefs = Gdx.app.getPreferences("SpaceWarRecords");
+        for (int i = 0; i < players.length; i++) {
+            players[i].name = prefs.getString("name"+i, "Noname");
+            players[i].score = prefs.getInteger("score"+i, 0);
+            players[i].kills = prefs.getInteger("kills"+i, 0);
+        }
+    }
+
+    void clearTableOfRecords(){
+        for (Player player : players) player.clear();
     }
 
     class SunInputProcessor implements InputProcessor{
