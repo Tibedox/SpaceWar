@@ -272,9 +272,11 @@ public class ScreenGame implements Screen {
         spawnFragments(ship);
         ship.x = -10000;
         gameOver = true;
-        players[players.length-1].clone(main.player);
-        sortTableOfRecords();
-        saveTableOfRecords();
+        if(main.player.score > players[players.length-1].score) {
+            players[players.length - 1].clone(main.player);
+            sortTableOfRecords();
+            saveTableOfRecords();
+        }
     }
 
     private void sortTableOfRecords(){
