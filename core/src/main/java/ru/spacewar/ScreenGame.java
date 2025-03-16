@@ -39,6 +39,7 @@ public class ScreenGame implements Screen {
     Sound sndExplosion;
 
     SunButton btnBack;
+    SunButton btnRestart;
 
     Space[] space = new Space[2];
     Ship ship;
@@ -88,6 +89,7 @@ public class ScreenGame implements Screen {
         }
 
         btnBack = new SunButton("x", font70, 850, 1600);
+        btnRestart = new SunButton("restart", font70, 300);
 
         space[0] = new Space(0, 0);
         space[1] = new Space(0, SCR_HEIGHT);
@@ -112,6 +114,9 @@ public class ScreenGame implements Screen {
 
             if(btnBack.hit(touch)){
                 main.setScreen(main.screenMenu);
+            }
+            if(btnRestart.hit(touch)){
+                gameStart();
             }
         }
         if(controls == ACCELEROMETER){
@@ -195,6 +200,7 @@ public class ScreenGame implements Screen {
                 font50.draw(batch, players[i].score+"", 450, 1100-i*70, 200, Align.right, false);
                 font50.draw(batch, players[i].kills+"", 570, 1100-i*70, 200, Align.right, false);
             }
+            btnRestart.font.draw(batch, btnRestart.text, btnRestart.x, btnRestart.y);
         }
         batch.end();
     }
