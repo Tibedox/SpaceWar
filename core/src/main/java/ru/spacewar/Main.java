@@ -20,6 +20,7 @@ public class Main extends Game {
     public Vector3 touch;
     public BitmapFont font70white;
     public BitmapFont font70gray;
+    public BitmapFont font50white;
 
     Joystick joystick;
     Player player;
@@ -35,8 +36,9 @@ public class Main extends Game {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, SCR_WIDTH, SCR_HEIGHT);
         touch = new Vector3();
-        font70white = new BitmapFont(Gdx.files.internal("comicrelief70white.fnt"));
-        font70gray = new BitmapFont(Gdx.files.internal("comicrelief70gray.fnt"));
+        font70white = new BitmapFont(Gdx.files.internal("fnt/serif70white.fnt"));
+        font70gray = new BitmapFont(Gdx.files.internal("fnt/serif70gray.fnt"));
+        font50white = new BitmapFont(Gdx.files.internal("fnt/serif50white.fnt"));
 
         joystick = new Joystick(360, RIGHT);
         player = new Player();

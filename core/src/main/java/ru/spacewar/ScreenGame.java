@@ -22,7 +22,7 @@ public class ScreenGame implements Screen {
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private Vector3 touch;
-    private BitmapFont font;
+    private BitmapFont font50, font70;
     private Main main;
 
     Texture imgJoystick;
@@ -56,7 +56,8 @@ public class ScreenGame implements Screen {
         batch = main.batch;
         camera = main.camera;
         touch = main.touch;
-        font = main.font70white;
+        font70 = main.font70white;
+        font50 = main.font50white;
 
         sndBlaster = Gdx.audio.newSound(Gdx.files.internal("blaster.mp3"));
         sndExplosion = Gdx.audio.newSound(Gdx.files.internal("explosion.mp3"));
@@ -85,7 +86,7 @@ public class ScreenGame implements Screen {
             }
         }
 
-        btnBack = new SunButton("x", font, 850, 1600);
+        btnBack = new SunButton("x", font70, 850, 1600);
 
         space[0] = new Space(0, 0);
         space[1] = new Space(0, SCR_HEIGHT);
@@ -119,6 +120,10 @@ public class ScreenGame implements Screen {
         // события
         for(Space s: space) s.move();
         spawnEnemy();
+        if(!gameOver) {
+            ship.move();
+            spawnShots();
+        }
         for(int i=enemies.size()-1; i>=0; i--) {
             enemies.get(i).move();
             if(enemies.get(i).outOfScreen()){
@@ -131,10 +136,6 @@ public class ScreenGame implements Screen {
                 enemies.remove(i);
                 gameOver();
             }
-        }
-        if(!gameOver) {
-            ship.move();
-            spawnShots();
         }
         for(int i=shots.size()-1; i>=0; i--){
             shots.get(i).move();
@@ -181,9 +182,17 @@ public class ScreenGame implements Screen {
         }
         batch.draw(imgShip[ship.phase], ship.scrX(), ship.scrY(), ship.width, ship.height);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
-        font.draw(batch, "score:"+main.player.score, 10, 1600);
+        font50.draw(batch, "score:"+main.player.score, 10, 1600);
         if(gameOver){
-            font.draw(batch, "GAME OVER", 0, 1200, SCR_WIDTH, Align.center, true);
+            font70.draw(batch, "GAME OVER", 0, 1400, SCR_WIDTH, Align.center, true);
+            font50.draw(batch, "score", 450, 1200, 200, Align.right, false);
+            font50.draw(batch, "kills", 570, 1200, 200, Align.right, false);
+            for (int i = 0; i < players.length; i++) {
+                font50.draw(batch, i+1+"", 150, 1100-i*70);
+                font50.draw(batch, players[i].name, 250, 1100-i*70);
+                font50.draw(batch, players[i].score+"", 450, 1100-i*70, 200, Align.right, false);
+                font50.draw(batch, players[i].kills+"", 570, 1100-i*70, 200, Align.right, false);
+            }
         }
         batch.end();
     }
@@ -222,6 +231,7 @@ public class ScreenGame implements Screen {
             timeLastSpawnEnemy = TimeUtils.millis();
         }
     }
+
     private void spawnShots(){
         if(TimeUtils.millis()>timeLastShoot+timeShootInterval){
             shots.add(new Shot(ship.x-60, ship.y));
@@ -252,6 +262,7 @@ public class ScreenGame implements Screen {
         spawnFragments(ship);
         ship.x = -10000;
         gameOver = true;
+        players[players.length-1].clone(main.player);
     }
 
     class SunInputProcessor implements InputProcessor{
