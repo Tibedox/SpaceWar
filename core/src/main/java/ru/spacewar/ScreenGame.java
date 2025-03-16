@@ -115,7 +115,7 @@ public class ScreenGame implements Screen {
             if(btnBack.hit(touch)){
                 main.setScreen(main.screenMenu);
             }
-            if(btnRestart.hit(touch)){
+            if(gameOver && btnRestart.hit(touch)){
                 gameStart();
             }
         }
@@ -156,8 +156,10 @@ public class ScreenGame implements Screen {
                     shots.remove(i);
                     if(--enemies.get(j).hp == 0) {
                         spawnFragments(enemies.get(j));
-                        main.player.kills++;
-                        main.player.score+=enemies.get(j).price;
+                        if(!gameOver) {
+                            main.player.kills++;
+                            main.player.score += enemies.get(j).price;
+                        }
                         enemies.remove(j);
                     }
                     break;
@@ -189,16 +191,16 @@ public class ScreenGame implements Screen {
         }
         batch.draw(imgShip[ship.phase], ship.scrX(), ship.scrY(), ship.width, ship.height);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
-        font50.draw(batch, "score:"+main.player.score, 10, 1600);
+        font50.draw(batch, "score:"+main.player.score, 10, 1590);
         if(gameOver){
             font70.draw(batch, "GAME OVER", 0, 1400, SCR_WIDTH, Align.center, true);
-            font50.draw(batch, "score", 450, 1200, 200, Align.right, false);
-            font50.draw(batch, "kills", 570, 1200, 200, Align.right, false);
+            font50.draw(batch, "score", 500, 1200, 200, Align.right, false);
+            font50.draw(batch, "kills", 620, 1200, 200, Align.right, false);
             for (int i = 0; i < players.length; i++) {
-                font50.draw(batch, i+1+"", 150, 1100-i*70);
-                font50.draw(batch, players[i].name, 250, 1100-i*70);
-                font50.draw(batch, players[i].score+"", 450, 1100-i*70, 200, Align.right, false);
-                font50.draw(batch, players[i].kills+"", 570, 1100-i*70, 200, Align.right, false);
+                font50.draw(batch, i+1+"", 100, 1100-i*70);
+                font50.draw(batch, players[i].name, 200, 1100-i*70);
+                font50.draw(batch, players[i].score+"", 500, 1100-i*70, 200, Align.right, false);
+                font50.draw(batch, players[i].kills+"", 620, 1100-i*70, 200, Align.right, false);
             }
             btnRestart.font.draw(batch, btnRestart.text, btnRestart.x, btnRestart.y);
         }
@@ -287,7 +289,7 @@ public class ScreenGame implements Screen {
         }
     }
 
-    void saveTableOfRecords(){
+    public void saveTableOfRecords(){
         Preferences prefs = Gdx.app.getPreferences("SpaceWarRecords");
         for (int i = 0; i < players.length; i++) {
             prefs.putString("name"+i, players[i].name);
@@ -297,7 +299,7 @@ public class ScreenGame implements Screen {
         prefs.flush();
     }
 
-    void loadTableOfRecords(){
+    private void loadTableOfRecords(){
         Preferences prefs = Gdx.app.getPreferences("SpaceWarRecords");
         for (int i = 0; i < players.length; i++) {
             players[i].name = prefs.getString("name"+i, "Noname");
@@ -306,7 +308,7 @@ public class ScreenGame implements Screen {
         }
     }
 
-    void clearTableOfRecords(){
+    public void clearTableOfRecords(){
         for (Player player : players) player.clear();
     }
 

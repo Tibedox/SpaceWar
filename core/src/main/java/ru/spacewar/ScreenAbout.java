@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ScreenAbout implements Screen {
 
         imgBackGround = new Texture("space2.png");
 
-        btnBack = new SunButton("Back", font, 200, 500);
+        btnBack = new SunButton("Back", font, 150);
     }
 
 
@@ -56,7 +57,7 @@ public class ScreenAbout implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(imgBackGround, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-        font.draw(batch, "About", 400, 1500);
+        font.draw(batch, "ABOUT", 0, 1500, SCR_WIDTH, Align.center, false);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         batch.end();
     }
