@@ -17,7 +17,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ScreenGame implements Screen {
     private SpriteBatch batch;
@@ -39,6 +45,7 @@ public class ScreenGame implements Screen {
     Sound sndExplosion;
 
     SunButton btnBack;
+    SunButton btnSwitchGlobal;
     SunButton btnRestart;
 
     Space[] space = new Space[2];
@@ -47,11 +54,13 @@ public class ScreenGame implements Screen {
     List<Shot> shots = new ArrayList<>();
     List<Fragment> fragments = new ArrayList<>();
     Player[] players = new Player[10];
+    List<DataFromDB> db = new ArrayList<>();
 
     private long timeLastSpawnEnemy, timeSpawnEnemyInterval = 1500;
     private long timeLastShoot, timeShootInterval = 800;
     private int nFragments = 150;
     private boolean gameOver;
+    private boolean showGlobalRecords;
 
     public ScreenGame(Main main) {
         this.main = main;
@@ -89,6 +98,7 @@ public class ScreenGame implements Screen {
         }
 
         btnBack = new SunButton("x", font70, 850, 1600);
+        btnSwitchGlobal = new SunButton("Local", font70, 1300);
         btnRestart = new SunButton("restart", font70, 300);
 
         space[0] = new Space(0, 0);
@@ -112,6 +122,15 @@ public class ScreenGame implements Screen {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
 
+            if(btnSwitchGlobal.hit(touch) && gameOver){
+                showGlobalRecords = !showGlobalRecords;
+                if(showGlobalRecords){
+                    btnSwitchGlobal.setText("Global");
+                    loadFromInternetDB();
+                } else {
+                    btnSwitchGlobal.setText("Local");
+                }
+            }
             if(btnBack.hit(touch)){
                 main.setScreen(main.screenMenu);
             }
@@ -194,13 +213,23 @@ public class ScreenGame implements Screen {
         font50.draw(batch, "score:"+main.player.score, 10, 1590);
         if(gameOver){
             font70.draw(batch, "GAME OVER", 0, 1400, SCR_WIDTH, Align.center, true);
+            btnSwitchGlobal.font.draw(batch, btnSwitchGlobal.text, btnSwitchGlobal.x, btnSwitchGlobal.y);
             font50.draw(batch, "score", 500, 1200, 200, Align.right, false);
             font50.draw(batch, "kills", 620, 1200, 200, Align.right, false);
-            for (int i = 0; i < players.length; i++) {
-                font50.draw(batch, i+1+"", 100, 1100-i*70);
-                font50.draw(batch, players[i].name, 200, 1100-i*70);
-                font50.draw(batch, players[i].score+"", 500, 1100-i*70, 200, Align.right, false);
-                font50.draw(batch, players[i].kills+"", 620, 1100-i*70, 200, Align.right, false);
+            if(showGlobalRecords){
+                for (int i = 0; i < players.length; i++) {
+                    font50.draw(batch, i + 1 + "", 100, 1100 - i * 70);
+                    font50.draw(batch, db.get(i).name, 200, 1100 - i * 70);
+                    font50.draw(batch, db.get(i).score + "", 500, 1100 - i * 70, 200, Align.right, false);
+                    font50.draw(batch, db.get(i).kills + "", 620, 1100 - i * 70, 200, Align.right, false);
+                }
+            } else {
+                for (int i = 0; i < players.length; i++) {
+                    font50.draw(batch, i + 1 + "", 100, 1100 - i * 70);
+                    font50.draw(batch, players[i].name, 200, 1100 - i * 70);
+                    font50.draw(batch, players[i].score + "", 500, 1100 - i * 70, 200, Align.right, false);
+                    font50.draw(batch, players[i].kills + "", 620, 1100 - i * 70, 200, Align.right, false);
+                }
             }
             btnRestart.font.draw(batch, btnRestart.text, btnRestart.x, btnRestart.y);
         }
@@ -277,6 +306,10 @@ public class ScreenGame implements Screen {
             sortTableOfRecords();
             saveTableOfRecords();
         }
+        sendToInternetDB();
+        for (int i = 0; i < db.size(); i++) {
+            System.out.println(db.get(i).id+" "+db.get(i).name+" "+db.get(i).score+" "+db.get(i).kills+" "+db.get(i).created);
+        }
     }
 
     private void sortTableOfRecords(){
@@ -312,6 +345,48 @@ public class ScreenGame implements Screen {
 
     public void clearTableOfRecords(){
         for (Player player : players) player.clear();
+    }
+
+    private void sortRecordsInternetDB(){
+        class Cmp implements Comparator<DataFromDB> {
+            @Override
+            public int compare(DataFromDB o1, DataFromDB o2) {
+                return o2.score-o1.score;
+            }
+        }
+        db.sort(new Cmp());
+    }
+
+    public void loadFromInternetDB(){
+        Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("https://sch120.ru")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+        SpaceAPI api = retrofit.create(SpaceAPI.class);
+        Call<List<DataFromDB>> call = api.sendQuery("ask");
+        try {
+            Response<List<DataFromDB>> response = call.execute();
+            db = response.body();
+            sortRecordsInternetDB();
+        } catch (Exception e){
+
+        }
+    }
+
+    public void sendToInternetDB(){
+        Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("https://sch120.ru")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+        SpaceAPI api = retrofit.create(SpaceAPI.class);
+        Call<List<DataFromDB>> call = api.sendQuery(main.player.name, main.player.score, main.player.kills);
+        try {
+            Response<List<DataFromDB>> response = call.execute();
+            db = response.body();
+            sortRecordsInternetDB();
+        } catch (Exception e){
+
+        }
     }
 
     class SunInputProcessor implements InputProcessor{

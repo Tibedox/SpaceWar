@@ -22,10 +22,12 @@ public class ScreenLeaderBoard implements Screen {
 
     Texture imgBackGround;
 
-    SunButton btnGlobal;
+    SunButton btnSwitchGlobal;
     SunButton btnClear;
     SunButton btnBack;
+
     Player[] players;
+    private boolean showGlobalRecords;
 
     public ScreenLeaderBoard(Main main) {
         this.main = main;
@@ -38,7 +40,7 @@ public class ScreenLeaderBoard implements Screen {
 
         imgBackGround = new Texture("space2.png");
 
-        btnGlobal = new SunButton("Local", font70, 1350);
+        btnSwitchGlobal = new SunButton("Local", font70, 1350);
         btnClear = new SunButton("Clear", font70, 350);
         btnBack = new SunButton("Back", font70, 150);
     }
@@ -54,7 +56,16 @@ public class ScreenLeaderBoard implements Screen {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
 
-            if (btnClear.hit(touch)){
+            if(btnSwitchGlobal.hit(touch)){
+                showGlobalRecords = !showGlobalRecords;
+                if(showGlobalRecords){
+                    btnSwitchGlobal.setText("Global");
+                    main.screenGame.loadFromInternetDB();
+                } else {
+                    btnSwitchGlobal.setText("Local");
+                }
+            }
+            if (btnClear.hit(touch) && !showGlobalRecords){
                 main.screenGame.clearTableOfRecords();
                 main.screenGame.saveTableOfRecords();
             }
@@ -67,16 +78,25 @@ public class ScreenLeaderBoard implements Screen {
         batch.begin();
         batch.draw(imgBackGround, 0, 0, SCR_WIDTH, SCR_HEIGHT);
         font70.draw(batch, "LEADERBOARD", 0, 1500, SCR_WIDTH, Align.center, false);
-        btnGlobal.font.draw(batch, btnGlobal.text, btnGlobal.x, btnGlobal.y);
+        btnSwitchGlobal.font.draw(batch, btnSwitchGlobal.text, btnSwitchGlobal.x, btnSwitchGlobal.y);
         font50.draw(batch, "score", 500, 1200, 200, Align.right, false);
         font50.draw(batch, "kills", 620, 1200, 200, Align.right, false);
-        for (int i = 0; i < players.length; i++) {
-            font50.draw(batch, i+1+"", 100, 1100-i*70);
-            font50.draw(batch, players[i].name, 200, 1100-i*70);
-            font50.draw(batch, players[i].score+"", 500, 1100-i*70, 200, Align.right, false);
-            font50.draw(batch, players[i].kills+"", 620, 1100-i*70, 200, Align.right, false);
+        if(showGlobalRecords){
+            for (int i = 0; i < players.length; i++) {
+                font50.draw(batch, i + 1 + "", 100, 1100 - i * 70);
+                font50.draw(batch, main.screenGame.db.get(i).name, 200, 1100 - i * 70);
+                font50.draw(batch, main.screenGame.db.get(i).score + "", 500, 1100 - i * 70, 200, Align.right, false);
+                font50.draw(batch, main.screenGame.db.get(i).kills + "", 620, 1100 - i * 70, 200, Align.right, false);
+            }
+        } else {
+            for (int i = 0; i < players.length; i++) {
+                font50.draw(batch, i + 1 + "", 100, 1100 - i * 70);
+                font50.draw(batch, players[i].name, 200, 1100 - i * 70);
+                font50.draw(batch, players[i].score + "", 500, 1100 - i * 70, 200, Align.right, false);
+                font50.draw(batch, players[i].kills + "", 620, 1100 - i * 70, 200, Align.right, false);
+            }
         }
-        btnClear.font.draw(batch, btnClear.text, btnClear.x, btnClear.y);
+        if(!showGlobalRecords) btnClear.font.draw(batch, btnClear.text, btnClear.x, btnClear.y);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         batch.end();
     }
