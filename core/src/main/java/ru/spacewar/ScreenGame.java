@@ -307,9 +307,6 @@ public class ScreenGame implements Screen {
             saveTableOfRecords();
         }
         sendToInternetDB();
-        for (int i = 0; i < db.size(); i++) {
-            System.out.println(db.get(i).id+" "+db.get(i).name+" "+db.get(i).score+" "+db.get(i).kills+" "+db.get(i).created);
-        }
     }
 
     private void sortTableOfRecords(){
