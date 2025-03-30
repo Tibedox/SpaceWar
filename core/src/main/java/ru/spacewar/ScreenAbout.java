@@ -24,6 +24,9 @@ public class ScreenAbout implements Screen {
     Texture imgBackGround;
 
     SunButton btnBack;
+    private String text = "Это игра.\n" +
+        "В неё надо играть.\n" +
+        "Удачи.";
 
     public ScreenAbout(Main main) {
         this.main = main;
@@ -58,6 +61,7 @@ public class ScreenAbout implements Screen {
         batch.begin();
         batch.draw(imgBackGround, 0, 0, SCR_WIDTH, SCR_HEIGHT);
         font.draw(batch, "ABOUT", 0, 1500, SCR_WIDTH, Align.center, false);
+        font.draw(batch, text, 0, 1200, SCR_WIDTH, Align.center, false);
         btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         batch.end();
     }
