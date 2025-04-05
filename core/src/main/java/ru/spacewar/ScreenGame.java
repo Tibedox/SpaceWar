@@ -111,6 +111,7 @@ public class ScreenGame implements Screen {
 
     @Override
     public void show() {
+        Gdx.graphics.setForegroundFPS(60);
         Gdx.input.setInputProcessor(new SunInputProcessor());
         gameStart();
     }
@@ -217,7 +218,7 @@ public class ScreenGame implements Screen {
             font50.draw(batch, "score", 500, 1200, 200, Align.right, false);
             font50.draw(batch, "kills", 620, 1200, 200, Align.right, false);
             if(showGlobalRecords){
-                for (int i = 0; i < players.length; i++) {
+                for (int i = 0; i < Math.min(db.size(), players.length); i++) {
                     font50.draw(batch, i + 1 + "", 100, 1100 - i * 70);
                     font50.draw(batch, db.get(i).name, 200, 1100 - i * 70);
                     font50.draw(batch, db.get(i).score + "", 500, 1100 - i * 70, 200, Align.right, false);

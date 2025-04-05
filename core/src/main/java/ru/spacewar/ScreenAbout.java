@@ -11,9 +11,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ScreenAbout implements Screen {
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -43,6 +40,7 @@ public class ScreenAbout implements Screen {
 
     @Override
     public void show() {
+        Gdx.graphics.setForegroundFPS(10);
     }
 
     @Override

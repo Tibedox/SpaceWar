@@ -43,6 +43,7 @@ public class ScreenMenu implements Screen {
 
     @Override
     public void show() {
+        Gdx.graphics.setForegroundFPS(10);
     }
 
     @Override
